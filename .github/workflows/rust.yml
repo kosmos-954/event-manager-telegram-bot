@@ -32,33 +32,34 @@ jobs:
           filters: |
             app_src_path:
               - 'src/**'
+              - 'Cargo.toml'
             app_cfg_path:
               - 'cfg/**'
             dockerfile_path:
               - 'Dockerfile'
             iaac_path:
-              - 'iaac'
+              - 'iaac/**'
 
       - name: Install libssl-dev
         run: sudo apt-get install libssl-dev pkg-config -y
-        #if: steps.filter.outputs.app_src_path == 'true'
+        if: steps.filter.outputs.app_src_path == 'true'
 
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          #default_bump: false
+          default_bump: false
 
       - name: Replace version in Cargo.toml
         run: sed -i s/"^version .*$"/"version = \"${{ steps.tag_version.outputs.new_version }}\""/g Cargo.toml
-        #if: steps.filter.outputs.app_src_path == 'true'
+        if: steps.filter.outputs.app_src_path == 'true'
 
       - name: Build
         env:
           RUSTFLAGS: "-C target-feature=-crt-static"
         run: cargo build --release
-        #if: steps.filter.outputs.app_src_path == 'true'
+        if: steps.filter.outputs.app_src_path == 'true'
 
       - name: Create Release
         uses: actions/create-release@v1
@@ -70,7 +71,7 @@ jobs:
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
           draft: false
           prerelease: false
-#        if: steps.filter.outputs.app_src_path == 'true'
+        if: steps.filter.outputs.app_src_path == 'true'
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
@@ -82,20 +83,22 @@ jobs:
           asset_path: ./target/release/event-manager-telegram-bot
           asset_name: event-manager-telegram-bot
           asset_content_type: application/octet-stream
-#        if: steps.filter.outputs.app_src_path == 'true'
-#
+        if: steps.filter.outputs.app_src_path == 'true'
+
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.filter.outputs.app_src_path == 'true' or steps.filter.outputs.dockerfile_path == 'true'
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        if: steps.filter.outputs.app_src_path == 'true' or steps.filter.outputs.dockerfile_path == 'true'
 
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
@@ -107,3 +110,4 @@ jobs:
           build-args: |
             "REPOSITORY_ADDRESS=${{ github.server_url }}/${{ github.repository }}"
             "RELEASE_VERSION=${{ steps.tag_version.outputs.new_tag }}"
+        if: steps.filter.outputs.app_src_path == 'true' or steps.filter.outputs.dockerfile_path == 'true'
