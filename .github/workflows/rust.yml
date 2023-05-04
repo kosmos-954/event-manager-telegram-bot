@@ -120,6 +120,4 @@ jobs:
       - name: Install docker and docker-compose on target instance
         run: |
           ansible --version
-        if: steps.filter.outputs.app_src_path == 'true' || \
-            steps.filter.outputs.dockerfile_path == 'true' || \
-            steps.filter.outputs.iaac_path == 'true'
+        if: steps.filter.outputs.app_src_path == 'true' || steps.filter.outputs.dockerfile_path == 'true' || steps.filter.outputs.iaac_path == 'true'
