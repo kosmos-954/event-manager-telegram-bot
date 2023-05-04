@@ -116,3 +116,10 @@ jobs:
             "REPOSITORY_ADDRESS=${{ github.server_url }}/${{ github.repository }}"
             "RELEASE_VERSION=${{ steps.binary_version.outputs.binary_version_tag }}"
         if: steps.filter.outputs.app_src_path == 'true' || steps.filter.outputs.dockerfile_path == 'true'
+
+      - name: Install docker and docker-compose on target instance
+        run: |
+          ansible --version
+        if: steps.filter.outputs.app_src_path == 'true' || \
+            steps.filter.outputs.dockerfile_path == 'true' || \
+            steps.filter.outputs.iaac_path == 'true'
