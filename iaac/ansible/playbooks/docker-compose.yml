@@ -1,6 +1,5 @@
 ---
 - hosts: "docker_compose"
-  remote_user: "{{ system_user }}"
   gather_facts: yes
   become: yes
 
