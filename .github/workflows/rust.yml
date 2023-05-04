@@ -122,5 +122,5 @@ jobs:
           ansible-galaxy install adnanhodzic.docker-compose
           eval "$(ssh-agent -s)"
           echo -n ${{ secrets.DEPLOY_SSH_KEY }} | base64 -d | ssh-add -
-          ansible-playbook --user ${{ secrets.DEPLOY_SSH_USER }} iaac/ansible/playbooks/docker-compose.yml --extra-vars "target_host=${{ secrets.DOCKER_HOST_ADDRESS }}"
+          ansible-playbook --user ${{ secrets.DEPLOY_SSH_USER }} -i iaac/ansible/inventory iaac/ansible/playbooks/docker-compose.yml --extra-vars "target_host=${{ secrets.DOCKER_HOST_ADDRESS }}"
         if: steps.filter.outputs.app_src_path == 'true' || steps.filter.outputs.dockerfile_path == 'true' || steps.filter.outputs.iaac_path == 'true'
