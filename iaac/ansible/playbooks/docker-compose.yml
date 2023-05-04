@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ target_host }}"
+- hosts: "docker_compose"
   tasks:
     - name: Create test file
       copy:

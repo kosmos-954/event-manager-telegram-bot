@@ -1,0 +1,6 @@
+all:
+  children:
+    docker_compose:
+      hosts:
+        instane-1:
+          ansible_host: "{{ target_host }}"
