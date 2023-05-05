@@ -295,6 +295,7 @@ fn add_event(
                     match crate::db::add_event(conn, event) {
                         Ok(id) => {
                             return Ok(ReplyMessage::new(if id > 0 {
+                                let bot_name = env::var("BOT_NAME").unwrap();
                                 format!("Direct event link: https://t.me/{}?start={}", bot_name, id)
                             } else {
                                 format!("Failed to add event.")

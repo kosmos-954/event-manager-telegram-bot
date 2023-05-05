@@ -35,6 +35,7 @@ use crate::types::MessageType;
 use r2d2_sqlite::SqliteConnectionManager;
 use types::{Configuration, Context};
 use util::get_unix_time;
+use std::env;
 
 #[tokio::main]
 async fn main() {
@@ -81,6 +82,8 @@ async fn main() {
     let bot_info = bot.get_me().await.unwrap();
 
     let bot_name = bot_info.user.username;
+
+    env::set_var("BOT_NAME", bot_name);
 
     let context = Arc::new(Context {
         config,
