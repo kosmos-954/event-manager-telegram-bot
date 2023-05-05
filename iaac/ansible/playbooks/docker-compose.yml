@@ -25,7 +25,9 @@
 
     - name: Pip install docker-compose
       pip:
-        name: docker-compose
+        name:
+          - docker-compose
+          - compose
 
     - name: Start docker-compose for current version
       docker_compose:
