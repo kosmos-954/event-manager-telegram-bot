@@ -120,10 +120,23 @@ jobs:
         if: steps.filter.outputs.app_src_path == 'true' || steps.filter.outputs.dockerfile_path == 'true'
 
   deploy_packages:
-    environment: ${{ steps.meta.outputs.version }}
+    environment: ${{ github.ref_name }}
     runs-on: ubuntu-20.04
     permissions: write-all
     steps:
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
       - name: Install docker and docker-compose on target instance
         run: |
           ansible-galaxy install -r iaac/ansible/roles/requirements.yml
