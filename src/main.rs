@@ -78,6 +78,10 @@ async fn main() {
 
     let bot = Bot::new(&config.telegram_bot_token).auto_send();
 
+    let bot_info = bot.get_me().await.unwrap();
+
+    let bot_name = bot_info.user.username;
+
     let context = Arc::new(Context {
         config,
         pool,
