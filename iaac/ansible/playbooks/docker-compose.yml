@@ -16,6 +16,11 @@
         src: docker-compose.yml.j2
         dest: "/opt/docker-compose.{{ docker_image_version }}.yml"
 
+    - name: Install pip
+      package:
+        name: pip
+        state: present
+
     - name: Pip install docker-compose
       pip:
         name:
