@@ -29,12 +29,13 @@
     - name: Stop docker-compose for current version
       docker_compose:
         project_src: /opt
-        stopped: yes
+        state: absent
         files:
           - "/opt/docker-compose.{{ docker_image_version }}.yml"
 
     - name: Start docker-compose for current version
       docker_compose:
         project_src: /opt
+        state: present
         files:
           - "/opt/docker-compose.{{ docker_image_version }}.yml"
