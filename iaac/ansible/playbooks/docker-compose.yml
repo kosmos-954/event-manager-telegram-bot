@@ -23,6 +23,10 @@
         files:
           - "/opt/docker-compose.{{ docker_image_version }}.yml"
 
+    - name: Pip install docker-compose
+      pip:
+        name: docker-compose
+
     - name: Start docker-compose for current version
       docker_compose:
         project_src: /opt
