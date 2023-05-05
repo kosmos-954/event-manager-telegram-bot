@@ -119,8 +119,11 @@ jobs:
             "RELEASE_VERSION=${{ steps.binary_version.outputs.binary_version_tag }}"
         if: steps.filter.outputs.app_src_path == 'true' || steps.filter.outputs.dockerfile_path == 'true'
 
+  deploy_packages:
+    environment: ${{ steps.meta.outputs.version }}
+    runs-on: ubuntu-20.04
+    permissions: write-all
       - name: Install docker and docker-compose on target instance
-        environment: "${{ steps.meta.outputs.version }}"
         run: |
           ansible-galaxy install -r iaac/ansible/roles/requirements.yml
           eval "$(ssh-agent -s)"
