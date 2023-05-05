@@ -8,12 +8,12 @@
   tasks:
     - name: Generate config file for current version
       template:
-        src: cfg/event-manager-telegram-bot.toml.j2
+        src: event-manager-telegram-bot.toml.j2
         dest: "/usr/local/etc/event-manager-telegram-bot.{{ docker_image_version }}.toml"
 
     - name: Generate docker-compose file for current version
       template:
-        src: iaac/ansible/template/docker-compose.yml.j2
+        src: docker-compose.yml.j2
         dest: "/opt/docker-compose.{{ docker_image_version }}.yml"
 
     - name: Stop docker-compose for current version
