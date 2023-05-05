@@ -295,7 +295,7 @@ fn add_event(
                     match crate::db::add_event(conn, event) {
                         Ok(id) => {
                             return Ok(ReplyMessage::new(if id > 0 {
-                                format!("Direct event link: https://t.me/sign_up_for_event_bot?start={}", id)
+                                format!("Direct event link: https://t.me/{}?start={}", bot_name, id)
                             } else {
                                 format!("Failed to add event.")
                             }).into());
