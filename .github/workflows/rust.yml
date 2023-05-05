@@ -24,6 +24,9 @@ jobs:
     permissions: write-all
 
     steps:
+      - name: Test
+        run: echo ${{ github.base_ref }}
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
