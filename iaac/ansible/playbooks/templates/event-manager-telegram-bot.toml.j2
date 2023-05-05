@@ -1,8 +1,8 @@
 telegram_bot_token = "{{ TELEGRAM_BOT_TOKEN }}"
 payment_provider_token = "{{ PAYMENT_PROVIDER_TOKEN }}"
 
-support = "{{ support_param }}"
-help = "{{ help_param }}"
+support = "{{ support_param | default('') }}"
+help = "{{ help_param | default('') }}"
 # telegram ids, comma separated
 admin_ids = "{{ telegram_admin_ids_list | join(',') }}"
 
