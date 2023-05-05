@@ -123,6 +123,7 @@ jobs:
     environment: ${{ steps.meta.outputs.version }}
     runs-on: ubuntu-20.04
     permissions: write-all
+    steps:
       - name: Install docker and docker-compose on target instance
         run: |
           ansible-galaxy install -r iaac/ansible/roles/requirements.yml
