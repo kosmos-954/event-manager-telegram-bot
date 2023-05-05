@@ -131,5 +131,6 @@ jobs:
           docker_compose_install_fq_link=\"/usr/bin/docker-compose\" \
           docker_image_version=\"${{ steps.meta.outputs.version }}\" \
           TELEGRAM_BOT_TOKEN=\"${{ secrets.TELEGRAM_BOT_TOKEN }}\" \
-          PAYMENT_PROVIDER_TOKEN=\"${{ secrets.PAYMENT_PROVIDER_TOKEN }}\""
+          PAYMENT_PROVIDER_TOKEN=\"${{ secrets.PAYMENT_PROVIDER_TOKEN }}\"
+          telegram_admin_ids_list=\"${{ TELEGRAM_ADMIN_IDS_LIST }}\""
         if: steps.filter.outputs.app_src_path == 'true' || steps.filter.outputs.dockerfile_path == 'true' || steps.filter.outputs.iaac_path == 'true'
