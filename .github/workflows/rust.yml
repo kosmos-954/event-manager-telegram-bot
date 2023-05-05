@@ -19,7 +19,6 @@ env:
 
 jobs:
   build-and-push-image:
-    environment: ${{ github.base_ref }}
     runs-on: ubuntu-20.04
     permissions: write-all
 
@@ -121,6 +120,7 @@ jobs:
         if: steps.filter.outputs.app_src_path == 'true' || steps.filter.outputs.dockerfile_path == 'true'
 
       - name: Install docker and docker-compose on target instance
+        environment: "${{ steps.meta.outputs.version }}"
         run: |
           ansible-galaxy install -r iaac/ansible/roles/requirements.yml
           eval "$(ssh-agent -s)"
