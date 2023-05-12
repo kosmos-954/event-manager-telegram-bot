@@ -189,7 +189,7 @@ pub fn handle_callback(
                                         &user.user_name2,
                                         &format!(
                                             "late cancel {} {}",
-                                            format::ts(s.event.ts, s.event.timezone),
+                                            format::ts(s.event.ts, &s.event.timezone),
                                             s.event.name
                                         ),
                                         ctx.config.cancel_future_reservations_on_ban,
@@ -328,7 +328,7 @@ pub fn show_event_list(
                         let event_type = s.event.get_type();
                         if event_type == EventType::Announcement {
                             if let Ok(url) = Url::parse(&s.event.link) {
-                                vec![InlineKeyboardButton::url(format!("ℹ️ {} {}", format::ts(s.event.ts, s.event.timezone), s.event.name), url)]
+                                vec![InlineKeyboardButton::url(format!("ℹ️ {} {}", format::ts(s.event.ts, &s.event.timezone), s.event.name), url)]
                             } else {
                                 vec![]
                             }
@@ -345,7 +345,7 @@ pub fn show_event_list(
                                     } else {
                                         ""
                                     },
-                                    format::ts(s.event.ts, s.event.timezone),
+                                    format::ts(s.event.ts, &s.event.timezone),
                                     if s.state == EventState::Open {
                                         if s.event.max_adults == 0 || s.event.max_children == 0 {
                                             (s.event.max_adults - s.adults.reserved + s.event.max_children
@@ -694,7 +694,7 @@ fn show_waiting_list(
             list.push_str(&format!(
                 "\n \n{}\nНачало: {}\n",
                 format::event_title(&s.event),
-                format::ts(s.event.ts, s.event.timezone)
+                format::ts(s.event.ts, &s.event.timezone)
             ));
         }
         Err(e) => {

@@ -397,7 +397,7 @@ pub fn prepare_invoice(
 
                 Ok(Reply::Invoice {
                     title,
-                    description: format!("{} - {}", s.event.name, format::ts(s.event.ts, s.event.timezone)),
+                    description: format!("{} - {}", s.event.name, format::ts(s.event.ts, &s.event.timezone)),
                     currency: s.event.currency,
                     amount: adults * s.event.adult_ticket_price
                         + children * s.event.child_ticket_price,
