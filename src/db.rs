@@ -130,7 +130,7 @@ pub fn add_event(conn: &PooledConnection<SqliteConnectionManager>, e: Event) -> 
     if event_id != 0 && event_type != EventType::Announcement {
         let text = format!("\nЗдравствуйте!\nНе забудьте, пожалуйста, что вы записались на\n<a href=\"{}\">{}</a>\
             \nНачало: {}\nПожалуйста, вовремя откажитесь от мест, если ваши планы изменились.\n",
-            e.link, e.name, format::ts(e.ts), );
+            e.link, e.name, format::ts(e.ts, e.timestamp), );
         enqueue_message(conn, 
             event_id,
             "Bot",

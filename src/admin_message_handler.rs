@@ -61,7 +61,7 @@ pub fn handle_message(
                                     user.id.0,
                                     user.user_name1,
                                     format::event_title(&s.event),
-                                    format::ts(s.event.ts),
+                                    format::ts(s.event.ts, &s.event.timezone),
                                     pars[3].to_string()
                                 );
 
@@ -274,10 +274,10 @@ fn add_event(
             let mut start_string = v.start;
             let mut remind_string = v.remind;
             if start_string.len() == 16 {
-                start_string.push_str(v.timezone);
+                start_string.push_str(&v.timezone);
             }
             if remind_string.len() == 16 {
-                remind_string.push_str(v.timezone);
+                remind_string.push_str(&v.timezone);
             }
             match (
                 DateTime::parse_from_str(&start_string, "%Y-%m-%d %H:%M  %z"),

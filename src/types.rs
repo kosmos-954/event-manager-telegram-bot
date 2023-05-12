@@ -74,6 +74,7 @@ pub struct Event {
     pub adult_ticket_price: u64,
     pub child_ticket_price: u64,
     pub currency: String,
+    pub time: String,
 }
 
 impl Event {
