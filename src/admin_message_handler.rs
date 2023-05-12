@@ -28,6 +28,7 @@ struct NewEvent {
     adult_ticket_price: Option<f64>,
     child_ticket_price: Option<f64>,
     currency: String,
+    timezone: String,
 }
 
 /// Command line processor.
@@ -270,9 +271,17 @@ fn add_event(
 ) -> anyhow::Result<Reply> {
     match serde_json::from_str::<NewEvent>(&data) {
         Ok(v) => {
+            let mut start_string = v.start;
+            let mut remind_string = v.remind;
+            if start_string.len() == 16 {
+                start_string.push_str(v.timezone);
+            }
+            if remind_string.len() == 16 {
+                remind_string.push_str(v.timezone);
+            }
             match (
-                DateTime::parse_from_str(&v.start, "%Y-%m-%d %H:%M  %z"),
-                DateTime::parse_from_str(&v.remind, "%Y-%m-%d %H:%M  %z"),
+                DateTime::parse_from_str(&start_string, "%Y-%m-%d %H:%M  %z"),
+                DateTime::parse_from_str(&remind_string, "%Y-%m-%d %H:%M  %z"),
             ) {
                 (Ok(ts), Ok(remind)) => {
                     let event = Event {
@@ -288,6 +297,7 @@ fn add_event(
                         adult_ticket_price: (v.adult_ticket_price.unwrap_or(0.00f64) * 100.0) as u64,
                         child_ticket_price: (v.child_ticket_price.unwrap_or(0.00f64) * 100.0) as u64,
                         currency: v.currency,
+                        timezone: v.timezone,
                     };
 
                     if event.adult_ticket_price != 0 && event.max_adults == 0

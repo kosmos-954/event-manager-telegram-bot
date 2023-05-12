@@ -7,10 +7,10 @@ use db::EventStats;
 use r2d2::PooledConnection;
 use r2d2_sqlite::SqliteConnectionManager;
 
-pub fn ts(ts: u64) -> String {
+pub fn ts(ts: u64, timezone: &str) -> String {
     let naive = NaiveDateTime::from_timestamp(ts as i64, 0);
     let datetime: DateTime<Utc> = DateTime::from_utc(naive, Utc);
-    let local: DateTime<Local> = datetime.into();
+    let local: DateTime<Local> = datetime.with_timezone(timezone.parse().unwrap());
     local.format("%d.%m %H:%M").to_string()
 }
 
@@ -32,7 +32,7 @@ pub fn header(
     let mut header = format!(
         "\n \n{}\nНачало: {}.",
         event_title(&s.event),
-        ts(s.event.ts)
+        ts(s.event.ts, &s.event.timezone)
     );
     if is_admin {
         header.push_str(&format!(
@@ -123,14 +123,14 @@ pub fn messages(
                     format!(
                         "\n{}, {}:\n{}\n",
                         msg.sender,
-                        ts(msg.ts),
+                        ts(msg.ts, "+00:00"),
                         msg.text
                     )
                 } else {
                     format!(
                         "\n{}, {} ({}):\n{}\n",
                         msg.sender,
-                        ts(msg.ts),
+                        ts(msg.ts, "+00:00"),
                         if msg.waiting_list == 0 {
                             "для забронировавших"
                         } else {
@@ -148,5 +148,5 @@ pub fn messages(
 
 #[test]
 fn test_format() {
-    assert_eq!(ts(1650445814), "20.04 11:10");
+    assert_eq!(ts(1650445814, "+00:00"), "20.04 11:10");
 }
