@@ -130,7 +130,7 @@ pub fn add_event(conn: &PooledConnection<SqliteConnectionManager>, e: Event) -> 
     if event_id != 0 && event_type != EventType::Announcement {
         let text = format!("\nЗдравствуйте!\nНе забудьте, пожалуйста, что вы записались на\n<a href=\"{}\">{}</a>\
             \nНачало: {}\nПожалуйста, вовремя откажитесь от мест, если ваши планы изменились.\n",
-            e.link, e.name, format::ts(e.ts, e.timestamp), );
+            e.link, e.name, format::ts(e.ts, e.timezone), );
         enqueue_message(conn, 
             event_id,
             "Bot",
@@ -621,12 +621,13 @@ pub fn get_event(conn: &PooledConnection<SqliteConnectionManager>, event_id: u64
 
 pub fn get_event_name(conn: &PooledConnection<SqliteConnectionManager>, event_id: u64) -> Result<String, rusqlite::Error> {
     let mut stmt = conn
-        .prepare("SELECT events.name, events.ts FROM events WHERE id = ?1")?;
+        .prepare("SELECT events.name, events.ts, events.timezone FROM events WHERE id = ?1")?;
     let mut rows = stmt.query([event_id])?;
     if let Some(row) = rows.next()? {
         let name: String = row.get("name")?;
         let ts: u64 = row.get("ts")?;
-        Ok(format!("{} {}", format::ts(ts), name))
+        let timezone: Str = row.get("timezone")?;
+        Ok(format!("{} {}", format::ts(ts, timezone), name))
     } else {
         Err(rusqlite::Error::InvalidParameterName(
             "Failed to find event".to_string(),

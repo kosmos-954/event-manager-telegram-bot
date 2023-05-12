@@ -10,7 +10,7 @@ use r2d2_sqlite::SqliteConnectionManager;
 pub fn ts(ts: u64, timezone: &str) -> String {
     let naive = NaiveDateTime::from_timestamp(ts as i64, 0);
     let datetime: DateTime<Utc> = DateTime::from_utc(naive, Utc);
-    let local: DateTime<Local> = datetime.with_timezone(timezone.parse().unwrap());
+    let local: DateTime<Local> = datetime.with_timezone(timezone);
     local.format("%d.%m %H:%M").to_string()
 }
 
